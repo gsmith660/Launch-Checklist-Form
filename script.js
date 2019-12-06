@@ -30,16 +30,40 @@ window.addEventListener('load', function() {
                launchStatus.style.color = 'red';
                if (fuelLevel < 10000) {
                   fuelStatus.innerHTML = `Fuel level too low for launch`;
+               } else {
+                  fuelStatus.innerHTML = `Fuel level high enough for launch`;
                }
                if (cargoMass > 10000) {
                   cargoStatus.innerHTML = `Cargo mass too high for launch`;
+               } else {
+                  cargoStatus.innerHTML = `Cargo mass low enough for launch`;
                }
             } else {
                launchStatus.innerHTML = `Shuttle is ready for launch`;
                launchStatus.style.color = 'green';
+               faultyItems.style.visibility = 'hidden';
             }
          }
       }
+   });
+
+   this.fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
+      response.json().then(function(json) {
+         let missionTarget = document.getElementById('missionTarget');
+         let planetIndex = Math.floor(Math.random() * json.length);
+         let data = json[planetIndex];
+         missionTarget.innerHTML = `
+         <h2>Mission Destination</h2>
+         <ol style="text-align:center; list-style-position: inside;">
+            <li>Name: ${data.name}</li>
+            <li>Diameter: ${data.diameter}</li>
+            <li>Star: ${data.star}</li>
+            <li>Distance from Earth: ${data.distance}</li>
+            <li>Number of Moons: ${data.moons}</li>
+         </ol>
+         <img src="${data.image}"></img>
+         `;
+      });
    });
 });
 
